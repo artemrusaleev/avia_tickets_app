@@ -1,10 +1,9 @@
 import currencyUI from "./currency";
-import { getId } from "../plugins/uniqueid";
-
 class TicketsUI {
   constructor(currency) {
     this.container = document.querySelector(".tickets-sections .row");
     this.getCurrencySymbol = currency.getCurrencySymbol.bind(currency);
+    this.renderedTickets = {};
   }
   renderTickets(tickets) {
     this.clearContainer();
@@ -18,12 +17,12 @@ class TicketsUI {
     const currency = this.getCurrencySymbol();
 
     tickets.forEach((ticket) => {
-      const id = getId();
-      const template = TicketsUI.ticketTemplate(ticket, currency, id);
+      const template = TicketsUI.ticketTemplate(ticket, currency);
       fragment += template;
     });
 
     this.container.insertAdjacentHTML("afterbegin", fragment);
+    this.renderedTickets = document.querySelectorAll(".ticket-parent");
   }
 
   clearContainer() {
@@ -41,9 +40,11 @@ class TicketsUI {
     </div>`;
   }
 
-  static ticketTemplate(ticket, currency, id) {
+  static ticketTemplate(ticket, currency) {
     return `
-      <div data-ticket-id = '${id}'class="col s12 m6 ticket-parent">
+      <div data-ticket-id = '${JSON.stringify(
+        ticket
+      )}'class="col s12 m6 ticket-parent">
       <div class="card ticket-card">
         <div class="ticket-airline d-flex align-items-center">
           <img

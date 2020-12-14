@@ -1,10 +1,11 @@
 import "../css/style.css";
 import locations from "./store/locations";
+import favorites from "./store/favorites_store";
 import "./plugins";
 import formUI from "./views/form";
 import currencyUI from "./views/currency";
 import ticketsUI from "./views/tickets";
-import { getParent } from "./helpers/parent";
+import favoritesUI from "./views/favorites";
 
 document.addEventListener("DOMContentLoaded", (e) => {
   initApp();
@@ -14,12 +15,33 @@ document.addEventListener("DOMContentLoaded", (e) => {
     e.preventDefault();
     onFormSubmit();
   });
+
   ticketsUI.container.addEventListener("click", (e) => {
     let target = e.target;
-    let ticket = JSON.parse(getParent(target, "ticket-parent"));
-    console.log(ticket);
+    let parent = target.parentNode;
+    if (parent.classList.contains("fav-btn")) {
+      let ticket = JSON.parse(
+        parent.closest(".ticket-parent").dataset.ticketId
+      );
+      favorites.addTicketToStore(ticket);
+      favoritesUI.renderFavoritesTickets(favorites.store);
+      target.parentNode.classList.add("disabled");
+    }
   });
 
+  favoritesUI.container.addEventListener("click", (e) => {
+    let target = e.target;
+    if (target.classList.contains("delete-btn")) {
+      let ticket = JSON.parse(target.dataset.ticketId);
+      favorites.removeTicketFromStore(ticket);
+      favoritesUI.renderFavoritesTickets(favorites.store);
+      ticketsUI.renderedTickets.forEach((el) => {
+        if (el.dataset.ticketId === JSON.stringify(ticket)) {
+          el.querySelector(".fav-btn").classList.remove("disabled");
+        }
+      });
+    }
+  });
   // handlers
   async function initApp() {
     await locations.init();
@@ -33,7 +55,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
     const depart_date = formUI.departDateValue;
     const return_date = formUI.returnDateValue;
     const currency = currencyUI.сurrencyValue;
-    console.log(origin, destination, depart_date, return_date);
 
     await locations.fetchTickets({
       origin,
@@ -44,5 +65,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
     });
 
     ticketsUI.renderTickets(locations.lastSearch);
+    if (favorites.store.length) {
+      favoritesUI.renderFavoriteTickets(favorites.store);
+    }
   }
 });
