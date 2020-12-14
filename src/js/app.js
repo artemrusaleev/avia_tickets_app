@@ -14,11 +14,12 @@ document.addEventListener("DOMContentLoaded", (e) => {
     e.preventDefault();
     onFormSubmit();
   });
-  document.addEventListener("click", (e) => {
-    if (e.target.parentNode.classList.contains("fav-btn")) {
-      getParent(e.target, "ticket-parent");
-    }
+  ticketsUI.container.addEventListener("click", (e) => {
+    let target = e.target;
+    let ticket = JSON.parse(getParent(target, "ticket-parent"));
+    console.log(ticket);
   });
+
   // handlers
   async function initApp() {
     await locations.init();

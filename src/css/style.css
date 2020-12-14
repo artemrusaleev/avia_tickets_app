@@ -1,3 +1,9 @@
+body {
+  background: url("https://clipart-db.ru/file_content/rastr/bg-new-year-047.jpg")
+    no-repeat center;
+  background-size: cover;
+  background-attachment: fixed;
+}
 .d-flex {
   display: flex;
 }
