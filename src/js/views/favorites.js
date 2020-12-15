@@ -46,7 +46,11 @@ class FavoritesUI {
         <span class="ticket-price ml-auto">${currency}${ticket.price}</span>
       </div>
       <div class="ticket-additional-info">
-        <span class="ticket-transfers">Пересадок: ${ticket.transfers}</span>
+        <span class="ticket-transfers">${
+          ticket.transfers === 0
+            ? "Без пересадок"
+            : "Количество пересадок: " + ticket.transfers
+        }</span>
         <span class="ticket-flight-number">Номер рейса: ${
           ticket.flight_number
         }</span>
