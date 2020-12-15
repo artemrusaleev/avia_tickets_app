@@ -24,4 +24,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Please make sure to update tests as appropriate.
 
-## [DEMO] (https://avia-tickets-app-aa0c1.web.app/)
+## [DEMO](https://avia-tickets-app-aa0c1.web.app/)
